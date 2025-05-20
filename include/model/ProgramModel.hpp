@@ -1,17 +1,16 @@
 #pragma once
-#include "model/A-star.hpp"
-//#include "model/Dijkstra.hpp"
-//#include "model/Graph.hpp"
+#include <memory>
+#include "model/Algorithms.hpp"
 #include "model/Board.hpp"
+#include "model/Reader.hpp"
 
 class ProgramModel {
 private:
-    Board board;
-    std::string filepath;
-    std::map<std::string, std::unique_ptr<Algorithm>> algorithms;
+    Board initial_board;
+    std::map<std::string, std::unique_ptr<Algorithms>> algorithms;
 public:
-    ProgramModel(std::string filepath)
-    void run_A_Star();
-
-
+    ProgramModel();
+    void init();
+    void create_board(int rows, int cols, int sec_count, std::vector<std::string> board_config);
+    void run_solver(const std::string& algorithm);
 };

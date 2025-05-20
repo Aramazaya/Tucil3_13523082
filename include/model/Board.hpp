@@ -17,7 +17,20 @@ struct Position {
     bool operator==(const Position& other) const {
         return row == other.row && col == other.col;
     }
+    bool operator!=(const Position& other) const {
+        return !(*this == other);
+    }
 };
+
+class BoardException : public std::exception {
+    private:
+        std::string message;
+    public:
+        BoardException(const std::string& msg) : message(msg) {}
+        const char* what() const noexcept override {
+            return message.c_str();
+        }
+    };
 
 class Cell : public std::enable_shared_from_this<Cell> {
 private:
@@ -27,25 +40,50 @@ private:
 public:
     Cell(int x, int y, const std::shared_ptr<Piece> piece) :position(Position(x, y)), piece(piece) {}
     std::shared_ptr<Piece> get_piece() const { return piece; }
+    bool operator==(const Cell& other) const {
+        return position == other.position && piece == other.piece;
+    }
+    bool operator!=(const Cell& other) const {
+        return !(*this == other);
+    }
     void set_piece(const std::shared_ptr<Piece> piece) { this->piece = piece; }
+    void set_empty() { piece = nullptr; }
+    void set_goal() { is_goal = true; }
     bool get_is_empty() { return piece == nullptr; }
     bool get_is_goal() { return is_goal; }
 };
+
 class Board : public std::enable_shared_from_this<Board> {
 private:
     int rows;
     int cols;
     std::vector<std::vector<std::unique_ptr<Cell>>> grid;
+    Position goal_pos;
     std::map<std::string, std::shared_ptr<Piece>> pieces;
     void update_cell(std::shared_ptr<Piece> piece);
     void clear_cell(std::shared_ptr<Piece> piece);
 public:
-    Board(int rows, int cols);
+    Board() = default;
+    Board(int rows, int cols, Position goal_pos = {0,0});
+    Board(const Board& other);
+    ~Board() = default;
+    int get_rows() const { return rows;}
+    int get_cols() const { return cols;}
+    Position get_goal_pos() const { return goal_pos;}
+    void set_goal_pos(Position pos) { goal_pos = pos;}
     void add_piece(const std::shared_ptr<Piece>& piece);
     void remove_piece(const std::shared_ptr<Piece>& piece);
-    void move_piece(std::shared_ptr<Piece>& piece, Position newHead);
-    BoardException is_valid_pos(Position pos) const;
+    void move_piece(std::string piece_id, Position new_head);
+    bool is_valid_pos(Position pos) const;
+    bool is_valid_piece(std::shared_ptr<Piece> piece, Position new_head) const;
     Cell& get_cell(Position pos) const;
+    std::vector<std::vector<std::unique_ptr<Cell>>>& get_grid() { return grid;}
+    const std::map<std::string, std::shared_ptr<Piece>>& get_pieces() const { return pieces;}
+    std::shared_ptr<Piece> get_piece(Position pos) const { return grid[pos.row][pos.col]->get_piece();}
+    std::shared_ptr<Piece> get_piece(std::string id) const;
+    std::vector<Position> get_possible_positions(std::shared_ptr<Piece> piece) const;
+    bool operator==(const Board& other) const;
+    bool operator!=(const Board& other) const { return !(*this == other);}
     class InvalidPositionException : public BoardException {
     public:
         InvalidPositionException(const std::string& msg) : BoardException(msg) {}
@@ -82,14 +120,4 @@ public:
     public:
         InvalidColorException(const std::string& msg) : BoardException(msg) {}
     };
-};
-
-class BoardException : public std::exception {
-private:
-    std::string message;
-public:
-    BoardException(const std::string& msg) : message(msg) {}
-    const char* what() const noexcept override {
-        return message.c_str();
-    }
 };
