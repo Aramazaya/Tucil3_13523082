@@ -1,1 +1,0 @@
-/usr/bin/g++ -g CMakeFiles/RushHourV.1.0.dir/src/controller/main.cpp.o -o bin/RushHourV.1.0 

@@ -2,6 +2,9 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <map>
+#include <exception>
+#include <string>
 #include "Piece.hpp"
 class Piece;
 
@@ -22,7 +25,7 @@ private:
     std::shared_ptr<Piece> piece;
     bool is_goal; // true if the cell is a goal cell
 public:
-    Cell(Position pos, const std::shared_ptr<Piece> piece) :position(pos), piece(piece) {}
+    Cell(int x, int y, const std::shared_ptr<Piece> piece) :position(Position(x, y)), piece(piece) {}
     std::shared_ptr<Piece> get_piece() const { return piece; }
     void set_piece(const std::shared_ptr<Piece> piece) { this->piece = piece; }
     bool get_is_empty() { return piece == nullptr; }
@@ -32,5 +35,61 @@ class Board : public std::enable_shared_from_this<Board> {
 private:
     int rows;
     int cols;
-    std::vector<std::vector<Cell>> grid;
+    std::vector<std::vector<std::unique_ptr<Cell>>> grid;
+    std::map<std::string, std::shared_ptr<Piece>> pieces;
+    void update_cell(std::shared_ptr<Piece> piece);
+    void clear_cell(std::shared_ptr<Piece> piece);
+public:
+    Board(int rows, int cols);
+    void add_piece(const std::shared_ptr<Piece>& piece);
+    void remove_piece(const std::shared_ptr<Piece>& piece);
+    void move_piece(std::shared_ptr<Piece>& piece, Position newHead);
+    BoardException is_valid_pos(Position pos) const;
+    Cell& get_cell(Position pos) const;
+    class InvalidPositionException : public BoardException {
+    public:
+        InvalidPositionException(const std::string& msg) : BoardException(msg) {}
+    };
+    class PieceNotFoundException : public BoardException {
+    public:
+        PieceNotFoundException(const std::string& msg) : BoardException(msg) {}
+    };
+    class InvalidMoveException : public BoardException {
+    public:
+        InvalidMoveException(const std::string& msg) : BoardException(msg) {}
+    };
+    class PieceAlreadyExistsException : public BoardException {
+    public:
+        PieceAlreadyExistsException(const std::string& msg) : BoardException(msg) {}
+    };
+    class CellOccupiedException : public BoardException {
+    public:
+        CellOccupiedException(const std::string& msg) : BoardException(msg) {}
+    };
+    class CellNotFoundException : public BoardException {
+    public:
+        CellNotFoundException(const std::string& msg) : BoardException(msg) {}
+    };
+    class InvalidPieceException : public BoardException {
+    public:
+        InvalidPieceException(const std::string& msg) : BoardException(msg) {}
+    };
+    class InvalidOrientationException : public BoardException {
+    public:
+        InvalidOrientationException(const std::string& msg) : BoardException(msg) {}
+    };
+    class InvalidColorException : public BoardException {
+    public:
+        InvalidColorException(const std::string& msg) : BoardException(msg) {}
+    };
+};
+
+class BoardException : public std::exception {
+private:
+    std::string message;
+public:
+    BoardException(const std::string& msg) : message(msg) {}
+    const char* what() const noexcept override {
+        return message.c_str();
+    }
 };

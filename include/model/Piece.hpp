@@ -18,16 +18,30 @@ protected:
     int id;
     int length;
     Position head;
+    std::vector<Position> positions;
     Orientation orientation;
     Color color;
 public:
-    Piece(int id, int length, const Position& pos, const Orientation& orient, const Color& co) : id(id), length(length), head(pos), orientation(orient), color(co) {}
+    Piece(int id, int length, const Position& pos, const Orientation& orient, const Color& co) : id(id), length(length), head(pos), orientation(orient), color(co) {
+        if (orient == Orientation::HORIZONTAL) {
+            for (int i = head.col;i<head.col + length; i++){
+                Position x(head.row, i);
+                positions.push_back(x);
+            }
+        } else {
+            for (int i = head.row; i < head.row + length; i++){
+                Position x(i, head.col);
+                positions.push_back(x);
+            }
+        }
+    }
 
-    int getId() const { return id; }
-    int getLength() const { return length; }
-    Orientation getOrientation() const { return orientation; }
-    Color getColor() const { return color; }
-    Position getHead() const { return head; }
+    int get_id() const { return id; }
+    int get_length() const { return length; }
+    Orientation get_orientation() const { return orientation; }
+    std::vector<Position> get_positions() const { return positions;}
+    Color get_color() const { return color; }
+    Position get_head() const { return head; }
     virtual void move(Position newHead);
 };
 

@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/home/acengngaceng/Documents/STEAMY AHH/Tucil3_13523082/build",
-  "command": "/usr/bin/g++  -I\"/home/acengngaceng/Documents/STEAMY AHH/Tucil3_13523082/include\" -I\"/home/acengngaceng/Documents/STEAMY AHH/Tucil3_13523082/include/model\" -I\"/home/acengngaceng/Documents/STEAMY AHH/Tucil3_13523082/include/view\" -I\"/home/acengngaceng/Documents/STEAMY AHH/Tucil3_13523082/include/controller\" -g -std=gnu++17 -Wall -Wextra -Wpedantic -o CMakeFiles/RushHourV.1.0.dir/src/controller/main.cpp.o -c \"/home/acengngaceng/Documents/STEAMY AHH/Tucil3_13523082/src/controller/main.cpp\"",
-  "file": "/home/acengngaceng/Documents/STEAMY AHH/Tucil3_13523082/src/controller/main.cpp",
-  "output": "CMakeFiles/RushHourV.1.0.dir/src/controller/main.cpp.o"
-}
-]
