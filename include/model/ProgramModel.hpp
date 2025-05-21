@@ -7,10 +7,11 @@
 class ProgramModel {
 private:
     Board initial_board;
-    std::map<std::string, std::unique_ptr<Algorithms>> algorithms;
+    std::map<std::string, std::shared_ptr<Algorithms>> algorithms;
 public:
     ProgramModel();
     void init();
     void create_board(int rows, int cols, int sec_count, std::vector<std::string> board_config);
-    void run_solver(const std::string& algorithm);
+    Board get_initial_board() const { return initial_board; }
+    Algorithms::Result run_solver(const std::string& algorithm, const std::string& heuristics = "blockedcarheuristic");
 };

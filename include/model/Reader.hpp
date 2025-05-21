@@ -58,5 +58,6 @@ public:
     static Position find_head(const std::vector<Position>& positions, Orientation orientation);
     static std::pair<int, int> read_dimensions(std::ifstream& file);
     static int read_secondary_count(std::ifstream& file);
+    static Position find_goal_position(const std::vector<std::string>& board_config, int rows, int cols);
     static std::vector<std::string> read_board_config(std::ifstream& file, int rows, int cols);
 };

@@ -4,23 +4,16 @@
 #include <string>
 #include <map>
 #include <exception>
-#include <string>
+#include <sstream>
+#include <iostream>
+#include <stdexcept>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
 #include "Piece.hpp"
+#include "Position.h"
 class Piece;
-
-struct Position {
-    int row;
-    int col;
-    
-    Position(int r = 0, int c = 0) : row(r), col(c) {}
-    
-    bool operator==(const Position& other) const {
-        return row == other.row && col == other.col;
-    }
-    bool operator!=(const Position& other) const {
-        return !(*this == other);
-    }
-};
 
 class BoardException : public std::exception {
     private:
@@ -36,7 +29,7 @@ class Cell : public std::enable_shared_from_this<Cell> {
 private:
     Position position;
     std::shared_ptr<Piece> piece;
-    bool is_goal; // true if the cell is a goal cell
+    bool is_goal;
 public:
     Cell(int x, int y, const std::shared_ptr<Piece> piece) :position(Position(x, y)), piece(piece) {}
     std::shared_ptr<Piece> get_piece() const { return piece; }
@@ -82,8 +75,10 @@ public:
     std::shared_ptr<Piece> get_piece(Position pos) const { return grid[pos.row][pos.col]->get_piece();}
     std::shared_ptr<Piece> get_piece(std::string id) const;
     std::vector<Position> get_possible_positions(std::shared_ptr<Piece> piece) const;
+    Board& operator=(const Board& other);
     bool operator==(const Board& other) const;
     bool operator!=(const Board& other) const { return !(*this == other);}
+    std::string to_string() const;
     class InvalidPositionException : public BoardException {
     public:
         InvalidPositionException(const std::string& msg) : BoardException(msg) {}

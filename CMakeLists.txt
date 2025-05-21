@@ -5,10 +5,10 @@ project(RushHourV.1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Set output directory for binaries
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+# Set output directory for binaries (changed to output to project root/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
 
 # Include directories
 include_directories(
@@ -20,7 +20,6 @@ include_directories(
 
 # Collect source files
 file(GLOB_RECURSE SOURCES 
-    "${CMAKE_SOURCE_DIR}/src/*.cpp"
     "${CMAKE_SOURCE_DIR}/src/model/*.cpp"
     "${CMAKE_SOURCE_DIR}/src/view/*.cpp"
     "${CMAKE_SOURCE_DIR}/src/controller/*.cpp"
@@ -49,3 +48,6 @@ endif()
 
 # Optional: Create install target
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+
+# Make sure the bin directory exists
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)

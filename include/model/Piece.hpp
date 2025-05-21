@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "Board.hpp"
+#include "Position.h"
 enum Orientation {
     HORIZONTAL,
     VERTICAL

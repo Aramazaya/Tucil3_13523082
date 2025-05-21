@@ -8,10 +8,15 @@
 
 class ProgramController {
 private:
-    std::unique_ptr<ProgramModel> model;
-    std::unique_ptr<ProgramView> view;
+    std::shared_ptr<ProgramModel> model;
+    std::shared_ptr<ProgramView> view;
 public:
     ProgramController();
+    void init();
+    void main_menu();
+    void load();
+    void solver();
+    void exit();
     void load_board(const std::string& filepath);
-    void run_solver(const std::string& algorithm);
+    void run_solver(const std::string& algorithm, const std::string& heuristics = "blockedcarheuristic");
 };
